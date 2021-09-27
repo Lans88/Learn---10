@@ -1,0 +1,351 @@
+// Функции
+func greet(person: String) -> String {
+    let greeting = "Hello, \(person)!"
+    return greeting
+}
+print(greet(person: "Anna"))
+print(greet(person: "Brain"))
+
+//Функция без папараметров
+func sayHelloWorld() -> String {
+    return "Hello, World"
+}
+print (sayHelloWorld())
+
+//Функция с несколькими параметрами
+func greetAgain(person: String) -> String {
+    let greeting = "Hello again, \(person)!"
+    return greeting
+}
+
+func greet(person: String, alreadyGreeted: Bool) -> String {
+   if alreadyGreeted {
+       return greetAgain(person: person)
+   } else {
+       return greet(person: person)
+   }
+    
+}
+print(greet(person: "Tim", alreadyGreeted: true))
+
+//Функции невозвращающие значения
+func greet2(person: String) {
+    print("Hello, \(person)!")
+}
+greet2(person: "Dave")
+
+//Игнорирование возвращаемого значения
+/*func printAndCount(string: String) -> Int {
+    print(string)
+    return string.count
+}
+func printWithoutCounting(string: String) {
+    let _ = printWithoutCounting(string: String)
+}
+
+printAndCount(string: "Hello, world!")
+printWithoutCounting(string: "Hello, world")*/
+
+//Функции возвращающие несколько значений
+//Определение минимального и максимального значения в массиве
+func minMax(array: [Int]) -> (min: Int, max: Int) {
+    var currentMin = array[0]
+    var currentMax = array[0]
+    for value in array[1..<array.count] {
+        if value < currentMin {
+            currentMin = value
+        } else if value > currentMax {
+            currentMax = value
+        }
+    }
+    return (currentMin, currentMax)
+}
+let bounds = minMax(array:[0, -44, 3, 89, 2, -5])
+print ("Min = \(bounds.min); Max = \(bounds.max)")
+
+//Добавление опционального типа в функцию
+
+func minMax(array: [Int]) -> (min: Int, max: Int)? {
+    if array.isEmpty {return nil}
+    var currentMin = array[0]
+    var currentMax = array[0]
+    for value in array[1..<array.count] {
+        if value < currentMin {
+            currentMin = value
+        } else if value > currentMax {
+            currentMax = value
+        }
+    }
+    return (currentMin, currentMax)
+}
+if let bounds = minMax(array:[0, -44, 3, 89, 2, -5]) {
+print ("Min = \(bounds.min); Max = \(bounds.max)")
+} else {
+    print ("Array is empty")
+}
+
+
+//Ярлыки аргументов и имена параметров Функции
+func greet(person: String, from homeTown: String) -> String {
+    return "Hello \(person)! Glad you could visit from \(homeTown)."
+}
+print(greet(person: "Bill", from: "Cupertino"))
+
+
+//Вариативные параметры функции
+func multyply (a: Int, b: Int) -> Int {
+    return a * b
+}
+print(multyply (a: 4, b: 5))
+
+//пример со средним арифметическим
+func arifmeticMean (_ numbers: Double...) -> Double {
+    var total: Double = 0
+    for number in numbers {
+        total += number
+    }
+    return total / Double(numbers.count)
+}
+print(arifmeticMean(1, 2, 3, 4, 5))
+
+//Сквозные параметры
+func swapTwoInts(_ a: inout Int, _ b: inout Int) {
+    let tempA = a
+    a = b
+    b = tempA
+}
+var someInt = 3
+var anotherInt = 107
+swapTwoInts(&someInt, &anotherInt)
+print(someInt, anotherInt)
+
+//Функциональные типы
+func addTwoInt(a: Int, b: Int) -> Int {
+    return a + b
+}
+
+func multyplyTwoInt(a: Int, b: Int) -> Int {
+    return a * b
+}
+
+func printHelloWorld() {
+    print("Hello, world")
+}
+var mathFunction: (Int, Int) -> Int = multyplyTwoInt
+print("Результат: \(mathFunction(2, 3))")
+
+//Использование функциональных типов
+func printMathResult(_ mathFunction: (Int, Int) -> Int, _ a: Int, _ b: Int){
+    print("Результат: \(mathFunction(a, b))")
+}
+printMathResult(multyplyTwoInt, 3, 5)
+
+//Счетчик приближения к 0
+func stepForward(_ input: Int) -> Int{
+    return input + 1
+}
+
+func stepBackward(_ input: Int) -> Int {
+    return input - 1
+}
+func chooseStepFunction(backward: Bool) -> (Int) -> Int{
+    return backward ? stepBackward : stepForward
+}
+var currentValue = 5
+let moveNearerToZero = chooseStepFunction(backward: currentValue > 0)
+print("Отсчет до нуля...")
+while currentValue != 0 {
+    print ("\(currentValue)...")
+    currentValue = moveNearerToZero(currentValue)
+}
+print ("Ноль!")
+
+//Вложенные функции
+/*
+func chooseStepFunction(backward: Bool) -> (Int) -> Int{
+    func stepForward(_ input: Int) -> Int{
+    return input + 1
+}
+
+    func stepBackward(_ input: Int) -> Int {
+    return input - 1
+}
+    return backward ? stepBackward : stepForward
+}
+var currentValue = 5
+let moveNearerToZero = chooseStepFunction(backward: currentValue > 0)
+print("Отсчет до нуля...")
+while currentValue != 0 {
+    print ("\(currentValue)...")
+    currentValue = moveNearerToZero(currentValue)
+}
+print ("Ноль!")*/
+
+//Замыкания
+let names = ["Cris", "Alex", "Barry", "Daniella"]
+func backward(_ s1: String, _ s2: String) -> Bool {
+    return s1 > s2
+}
+var reversNames = names.sorted(by: backward)
+reversNames = names.sorted(by: {(s1: String, s2: String) -> Bool in
+    return s1 > s2
+})
+print(reversNames)
+//Можно не писать исп.типы
+reversNames = names.sorted(by: { s1, s2 in
+    return s1 > s2
+})
+print(reversNames)
+//Если в замыкании один оператор return, его можно не писать
+reversNames = names.sorted(by: { s1, s2 in s1 > s2 })
+print(reversNames)
+
+//Можно не писать названия параметров
+reversNames = names.sorted(by: { $0 > $1 })
+print(reversNames)
+
+//Можно убрать параметры
+reversNames = names.sorted(by: { $0 > $1 })
+reversNames = names.sorted(by: > )
+print(reversNames)
+
+//Последующие замыкания
+func someFunc(closure: () -> Void) {
+    //что-то происходит
+}
+someFunc(closure: {
+    //тело замыкания
+})
+someFunc {
+    //тело самого замыкания
+}
+
+//Пример с сортировкой имен
+reversNames = names.sorted { $0 > $1 }
+print(reversNames)
+
+//Замыкания
+let names = ["Cris", "Alex", "Barry", "Daniella"]
+func backward(_ s1: String, _ s2: String) -> Bool {
+    return s1 > s2
+}
+var reversNames = names.sorted(by: backward)
+reversNames = names.sorted(by: {(s1: String, s2: String) -> Bool in
+    return s1 > s2
+})
+print(reversNames)
+//Можно не писать исп.типы
+reversNames = names.sorted(by: { s1, s2 in
+    return s1 > s2
+})
+print(reversNames)
+//Если в замыкании один оператор return, его можно не писать
+reversNames = names.sorted(by: { s1, s2 in s1 > s2 })
+print(reversNames)
+
+//Можно не писать названия параметров
+reversNames = names.sorted(by: { $0 > $1 })
+print(reversNames)
+
+//Можно убрать параметры
+reversNames = names.sorted(by: { $0 > $1 })
+reversNames = names.sorted(by: > )
+print(reversNames)
+
+//Последующие замыкания
+func someFunc(closure: () -> Void) {
+    //что-то происходит
+}
+someFunc(closure: {
+    //тело замыкания
+})
+someFunc {
+    //тело самого замыкания
+}
+
+//Пример с сортировкой имен
+reversNames = names.sorted { $0 > $1 }
+print(reversNames)
+
+//Сортировка словаря, разбор чисел на простые цифры
+let digitNames = [0: "Zero", 1: "One", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 
+                  6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"]
+let numbers = [18, 63, 529]
+let strings = numbers.map{ (number) -> String in 
+    var number = number
+    var output = ""
+    repeat {
+        output = digitNames[number % 10]! + output
+        number /= 10
+    } while number > 0
+    return output
+}
+print(strings)
+
+//Захват значений
+//Сделаем инкрементр, которые увеличивает значение на 1
+
+func makeIncrementer(forIncrementer amount: Int) -> () -> Int {
+    var runninTotal = 0
+    func incrementer() -> Int {
+        runninTotal += amount
+        return runninTotal
+    }
+    return incrementer
+}
+
+let incrementerByTen = makeIncrementer(forIncrementer: 10)
+print(incrementerByTen())
+print(incrementerByTen())
+print(incrementerByTen())
+print(incrementerByTen())
+
+let incrementerBySeven = makeIncrementer(forIncrementer: 7)
+print(incrementerBySeven())
+
+//Сбегающие замыкания
+var completionHandlers: [() -> Void] = []
+func someFuncWithEscapingClosure(completionHandler: @escaping () -> Void) {
+    completionHandlers.append(completionHandler)
+}
+func someFuncWithoutEscapingClosure(closure: () -> Void) {
+    closure()
+}
+class someClass {
+    var x = 10
+    func doSomeThing() {
+        someFuncWithEscapingClosure {
+            self.x = 100
+        }
+        someFuncWithoutEscapingClosure {
+            x = 200
+        }
+    }
+}
+
+let instance = someClass()
+instance.doSomeThing()
+print(instance.x)
+
+completionHandlers.first?()
+print(instance.x)
+
+//Автозамыкания
+var customerInLine = ["Cris", "Alex", "Barry", "Daniella", "Eva"]
+print (customerInLine.count)
+let customerProvider = { customerInLine.remove(at: 0) }
+print(customerInLine.count)
+print("Now serving \(customerProvider())!")
+print(customerInLine.count)
+
+func serve(customer customerProvider: () -> String) {
+    print("Now serving \(customerProvider())!")
+}
+serve( customer: { customerInLine.remove(at: 0) } )
+print(customerInLine.count)
+
+func serve(customer customerProvider: @autoclosure () -> String) {
+    print("Now serving \(customerProvider())!")
+}
+serve(customer: customerInLine.remove(at: 0))
+print(customerInLine.count)
